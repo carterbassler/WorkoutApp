@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
+import '../models/workout.dart';
+import 'active_workout_page.dart';
+
 class MainPage extends StatelessWidget {
   MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Workout newWorkout = Workout(name: "", duration: "", exercises: []);
     return Scaffold(
       backgroundColor: Color(0xFF1b1a22),
       body: SafeArea(
@@ -48,7 +52,7 @@ class MainPage extends StatelessWidget {
                         Text(
                           "Welcome",
                           style: TextStyle(
-                            color: Color(0xFFfd6750),
+                            color: Colors.white,
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
@@ -60,6 +64,32 @@ class MainPage extends StatelessWidget {
                             fontSize: 24,
                             color: Colors.white,
                           ),
+                        ),
+                        const SizedBox(height: 10),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ActiveWorkoutPage(
+                                  first: newWorkout,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                              padding: const EdgeInsets.all(10),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFfd6750),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                  child: Text('Start New Workout',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold)))),
                         ),
                       ],
                     );

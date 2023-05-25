@@ -19,15 +19,29 @@ class MyTextField extends StatelessWidget {
       child: TextField(
         controller: controller, 
         obscureText: hiddenText,
+        style: TextStyle(color: Colors.black), // Text color
         decoration: InputDecoration(
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black), // Border color
+            borderRadius: BorderRadius.circular(10), // Rounded edges
           ),
-          fillColor: Colors.white,
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black), // Border color
+            borderRadius: BorderRadius.circular(10), // Rounded edges
+          ),
+          fillColor: Colors.white, // Fill color
           filled: true,
           hintText: hintText,
+          hintStyle: TextStyle(color: Colors.grey[600]), // Hint text color
         ),
       ),
     );
   }
+
+
+
+
+
+
+
 }

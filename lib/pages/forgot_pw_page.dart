@@ -39,8 +39,8 @@ final emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-      ),
+      appBar: AppBar(),
+      backgroundColor: Color(0xFF1b1a22),
       body : Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [  
@@ -49,7 +49,7 @@ final emailController = TextEditingController();
             child: Text(
               "Enter your email and we will send you a new password",
               textAlign: TextAlign.center,
-              style : TextStyle(fontSize: 20),
+              style : TextStyle(fontSize: 20, color : Colors.white),
               ),
           ),
           const SizedBox(height:25),

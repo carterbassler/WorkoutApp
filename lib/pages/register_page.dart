@@ -58,8 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Color(0xFF1b1a22),
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -69,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 25),
                   Text("Sign Up Here",
                       style: TextStyle(
-                        color: Colors.grey[700],
+                        color: Colors.white,
                         fontSize: 16,
                       )),
 
@@ -115,14 +114,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('Already a member?',
-                          style: TextStyle(color: Colors.grey[700])),
+                          style: TextStyle(color: Colors.white)),
                       const SizedBox(width: 4),
                       GestureDetector(
                         onTap: widget.onTap,
                         child: const Text(
                           'Sign In',
                           style: TextStyle(
-                              color: Colors.blue, fontWeight: FontWeight.bold),
+                              color: Color(0xFFfd6750), fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],

@@ -1,7 +1,7 @@
 class aSet {
-  final int weight;
-  final int numReps;
-  final bool isCompleted;
+  int weight;
+  int numReps;
+  bool isCompleted;
   aSet({
     required this.weight,
     required this.numReps,

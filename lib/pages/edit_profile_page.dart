@@ -39,7 +39,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   //Function to Load the User Data from PreExisting Values
   Future<void> loadUserData() async {
     final FirebaseFirestore db = FirebaseFirestore.instance;
-    DocumentSnapshot doc = await db.collection('users').doc(auth.currentUser!.uid).get();
+    DocumentSnapshot doc =
+        await db.collection('users').doc(auth.currentUser!.uid).get();
 
     if (doc.exists) {
       Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
@@ -61,7 +62,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       "age": ageController.text,
       "height": heightController.text,
       "weight": weightController.text,
-      "imageUrl" : imageUrl,
+      "imageUrl": imageUrl,
     });
     print("Information Saved");
     Navigator.pop(context);
@@ -83,17 +84,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
     try {
       await referenceImageToUpload.putFile(File(file!.path));
-      String newImageUrl = await referenceImageToUpload.getDownloadURL(); 
+      String newImageUrl = await referenceImageToUpload.getDownloadURL();
 
-      await FirebaseFirestore.instance.collection('users').doc(auth.currentUser!.uid).update({
-        "imageUrl": newImageUrl
-      });
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(auth.currentUser!.uid)
+          .update({"imageUrl": newImageUrl});
 
       setState(() {
         imageUrl = newImageUrl;
         isLoading = false;
       });
-    } catch(error) {
+    } catch (error) {
       setState(() {
         isLoading = false; // end loading in case of error
       });
@@ -102,100 +104,103 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: Color(0xFF1b1a22),
-    body: SafeArea(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back, color: Colors.white,),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                Text(
-                  'Edit Profile',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                  ),
-                ),
-                SizedBox(width: 48),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: uploadImage,
-            child: isLoading
-                ? CircularProgressIndicator()
-                : StreamBuilder<DocumentSnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(auth.currentUser!.uid)
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<DocumentSnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        return const CircleAvatar(
-                          radius: 75,
-                          backgroundImage: NetworkImage(
-                              'https://via.placeholder.com/150'),
-                        );
-                      }
-
-                      if (snapshot.connectionState ==
-                          ConnectionState.active) {
-                        Map<String, dynamic>? data = snapshot.data?.data()
-                            as Map<String, dynamic>?;
-                        String? imageUrl = data?['imageUrl'];
-                        return CircleAvatar(
-                          radius: 75,
-                          backgroundImage: imageUrl != null
-                              ? NetworkImage(imageUrl)
-                              : const NetworkImage(
-                                  'https://via.placeholder.com/150'),
-                        );
-                      }
-
-                      // When the stream is still loading, show a loading indicator
-                      return const CircularProgressIndicator();
+    return Scaffold(
+      backgroundColor: Color(0xFF1b1a22),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
                     },
                   ),
-          ),
-          const SizedBox(height: 25),
-          MyTextField(
-            controller: nameController,
-            hintText: "First & Last Name",
-            hiddenText: false,
-          ),
-          const SizedBox(height: 25),
-          MyTextField(
-            controller: ageController,
-            hintText: "Age",
-            hiddenText: false,
-          ),
-          const SizedBox(height: 25),
-          MyTextField(
-            controller: heightController,
-            hintText: "Height",
-            hiddenText: false,
-          ),
-          const SizedBox(height: 25),
-          MyTextField(
-            controller: weightController,
-            hintText: "Weight",
-            hiddenText: false,
-          ),
-          const SizedBox(height: 25),
-          MyButton(onTap: finishProfileSetup, text: "Save Changes"),
-        ],
+                  Text(
+                    'Edit Profile',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                    ),
+                  ),
+                  SizedBox(width: 48),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: uploadImage,
+              child: isLoading
+                  ? CircularProgressIndicator()
+                  : StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(auth.currentUser!.uid)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          return const CircleAvatar(
+                            radius: 75,
+                            backgroundImage:
+                                NetworkImage('https://via.placeholder.com/150'),
+                          );
+                        }
+
+                        if (snapshot.connectionState ==
+                            ConnectionState.active) {
+                          Map<String, dynamic>? data =
+                              snapshot.data?.data() as Map<String, dynamic>?;
+                          String? imageUrl = data?['imageUrl'];
+                          return CircleAvatar(
+                            radius: 75,
+                            backgroundImage: imageUrl != null
+                                ? NetworkImage(imageUrl)
+                                : const NetworkImage(
+                                    'https://via.placeholder.com/150'),
+                          );
+                        }
+
+                        // When the stream is still loading, show a loading indicator
+                        return const CircularProgressIndicator();
+                      },
+                    ),
+            ),
+            const SizedBox(height: 25),
+            MyTextField(
+              controller: nameController,
+              hintText: "First & Last Name",
+              hiddenText: false,
+            ),
+            const SizedBox(height: 25),
+            MyTextField(
+              controller: ageController,
+              hintText: "Age",
+              hiddenText: false,
+            ),
+            const SizedBox(height: 25),
+            MyTextField(
+              controller: heightController,
+              hintText: "Height",
+              hiddenText: false,
+            ),
+            const SizedBox(height: 25),
+            MyTextField(
+              controller: weightController,
+              hintText: "Weight",
+              hiddenText: false,
+            ),
+            const SizedBox(height: 25),
+            MyButton(onTap: finishProfileSetup, text : "Save Changes"),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

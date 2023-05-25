@@ -14,7 +14,8 @@ class ProfilePage extends StatelessWidget {
   ProfilePage({super.key, required this.onTap});
 
   final FirebaseAuth auth = FirebaseAuth.instance;
-  DateTime today = DateTime.now(); 
+  DateTime today = DateTime.now();
+  User? user = FirebaseAuth.instance.currentUser;
 
   Future<String?> getFieldValue(String docId, String fieldName) async {
     final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -30,6 +31,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime? creationTime = user?.metadata.creationTime;
+    DateTime accountCreationDate = DateTime.fromMillisecondsSinceEpoch(creationTime!.millisecondsSinceEpoch);
     return Scaffold(
       backgroundColor: Color(0xFF1b1a22),
       body: SafeArea(
@@ -42,7 +45,7 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: Icon(
-                      Icons.menu,
+                      Icons.edit,
                       color: Colors.white,
                     ),
                     onPressed: () {
@@ -158,21 +161,59 @@ class ProfilePage extends StatelessWidget {
                       ),
                       Column(
                         children: [
-                          Text("Workout History"),
+                          Text(
+                            "Workout History",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
                           Center(
                             child: Container(
-                              child: TableCalendar(
-                              locale: "en_US",
-                              rowHeight: 43,
-                              headerStyle: HeaderStyle(
-                                formatButtonVisible: false,
-                                titleCentered: true,
+                              padding: EdgeInsets.all(10),
+                              margin: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFfd6750),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              availableGestures: AvailableGestures.all,
-                              focusedDay: today,
-                              firstDay: DateTime.utc(2023,5,1),
-                              lastDay: DateTime.utc(2023,5,30),  
-                            )),
+                              child: TableCalendar(
+                                locale: "en_US",
+                                rowHeight: 36,
+                                headerStyle: HeaderStyle(
+                                  formatButtonVisible: false,
+                                  titleCentered: true,
+                                  titleTextStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  ),
+                                  headerMargin: EdgeInsets.all(0),
+                                  leftChevronIcon: Icon(
+                                    Icons.chevron_left,
+                                    color: Colors.white,
+                                  ),
+                                  rightChevronIcon: Icon(
+                                    Icons.chevron_right,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                calendarStyle: CalendarStyle(
+                                  todayDecoration: BoxDecoration(
+                                    color: Color(0xFF1b1a22),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  defaultTextStyle: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                  weekendTextStyle: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                availableGestures: AvailableGestures.all,
+                                focusedDay: DateTime.now(),
+                                firstDay: creationTime,
+                                lastDay: DateTime.utc(2030, 12, 31),
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -191,42 +232,44 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget profileInfo(String title, String value) {
-  List<String> valueParts = value.split(' ');  // Assuming your value comes in the form "100 kg"
+    List<String> valueParts =
+        value.split(' '); // Assuming your value comes in the form "100 kg"
 
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(15),
-      color: Color(0xFF2a2933),
-    ),
-    child: Column(
-      children: [
-        Text(
-          title,
-          style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 16),
-        ),
-        SizedBox(height: 10),
-        RichText(
-          text: TextSpan(
-            text: valueParts[0],
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                text: valueParts.length > 1 ? ' ${valueParts[1]}' : '',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-            ],
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Color(0xFF2a2933),
+      ),
+      child: Column(
+        children: [
+          Text(
+            title,
+            style:
+                TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 16),
           ),
-        ),
-      ],
-    ),
-  );
-}
+          SizedBox(height: 10),
+          RichText(
+            text: TextSpan(
+              text: valueParts[0],
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: valueParts.length > 1 ? ' ${valueParts[1]}' : '',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

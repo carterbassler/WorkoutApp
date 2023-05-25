@@ -4,9 +4,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
+import 'display_workouts_page.dart';
 import 'main_page.dart';
 import 'profile_page.dart';
-import 'workout_page.dart';
+import 'active_workout_page.dart';
 
 class HomePage extends StatefulWidget {
    HomePage({super.key});
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
     Widget build(BuildContext context) {
     final List<Widget> pages = [
       MainPage(),
-      WorkoutPage(),
+      DisplayWorkoutsPage(),
       ProfilePage(onTap: allDone,),
     ];
     return Scaffold(
@@ -54,15 +55,15 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconButton(
-                icon: Icon(Icons.home, color: selectedIndex == 0 ? Colors.blue : Colors.grey),
+                icon: Icon(Icons.home, color: selectedIndex == 0 ? Color(0xFFfd6750) : Colors.grey),
                 onPressed: () => navigateBottomBar(0),
               ),
               IconButton(
-                icon: Icon(Icons.fitness_center, color: selectedIndex == 1 ? Colors.blue : Colors.grey),
+                icon: Icon(Icons.fitness_center, color: selectedIndex == 1 ? Color(0xFFfd6750) : Colors.grey),
                 onPressed: () => navigateBottomBar(1),
               ),
               IconButton(
-                icon: Icon(Icons.person, color: selectedIndex == 2 ? Colors.blue : Colors.grey),
+                icon: Icon(Icons.person, color: selectedIndex == 2 ? Color(0xFFfd6750) : Colors.grey),
                 onPressed: () => navigateBottomBar(2),
               ),
             ],
