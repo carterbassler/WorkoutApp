@@ -1,16 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:workout_app/components/my_button.dart';
-import 'package:workout_app/pages/edit_profile_page.dart';
 
 import '../components/exercise_popup.dart';
 import '../components/other_button.dart';
 import '../components/set_card.dart';
-import '../models/exercise.dart';
-import '../models/set.dart';
 import '../models/workout.dart';
 
 class ActiveWorkoutPage extends StatefulWidget {

@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workout_app/components/my_button.dart';
 import 'package:workout_app/models/exercise.dart';
-import 'package:workout_app/pages/active_workout_page.dart';
 
 import '../components/workout_overview_card.dart';
 import '../models/set.dart';
