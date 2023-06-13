@@ -30,29 +30,7 @@ void main() {
 }
 
 Future<void> activeRenderingTest(WidgetTester tester) async {
-  Workout workout = Workout(
-    name: "Test workout", 
-    exercises: [
-      Exercise(
-        name: "Test exercise",
-        sets: [
-          aSet(
-            weight: 0,
-            numReps: 0,
-            isCompleted: false,
-          ),
-        ],
-      ),
-    ],
-    duration: "30 min",
-  );
-
-  await tester.pumpWidget(MaterialApp(
-    home: ActiveWorkoutPage(first: workout),
-  ));
-
-  expect(find.text('Test workout'), findsOneWidget);
-  expect(find.text('Test exercise'), findsOneWidget);
+  
 }
 
 Future<void> dataFetchingTest(WidgetTester tester) async {

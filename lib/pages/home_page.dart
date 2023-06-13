@@ -1,13 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
 import 'display_workouts_page.dart';
 import 'main_page.dart';
 import 'profile_page.dart';
-import 'active_workout_page.dart';
 
 class HomePage extends StatefulWidget {
    HomePage({super.key});
@@ -43,6 +40,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Color(0xFF1b1a22),
       bottomNavigationBar: Container(
+        height: 90,
         decoration: BoxDecoration(
           color: Color(0xFF111111),
           borderRadius: BorderRadius.vertical(

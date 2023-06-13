@@ -1,14 +1,8 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:workout_app/components/my_button.dart';
-import 'package:workout_app/pages/profile_page.dart';
 
 import '../components/my_textfield.dart';
 
@@ -69,39 +63,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     //NAVIGATE BACK TO MAIN PROFILE PAGE
   }
 
-  //Function to Upload the Image
-  void uploadImage() async {
-    setState(() {
-      isLoading = true; // start loading
-    });
-    ImagePicker imagePicker = ImagePicker();
-    String uniqueFileName = DateTime.now().microsecondsSinceEpoch.toString();
-    XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
-    Reference referenceRoot = FirebaseStorage.instance.ref();
-    Reference referenceDirImages = referenceRoot.child('images');
-
-    Reference referenceImageToUpload = referenceDirImages.child(uniqueFileName);
-
-    try {
-      await referenceImageToUpload.putFile(File(file!.path));
-      String newImageUrl = await referenceImageToUpload.getDownloadURL();
-
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(auth.currentUser!.uid)
-          .update({"imageUrl": newImageUrl});
-
-      setState(() {
-        imageUrl = newImageUrl;
-        isLoading = false;
-      });
-    } catch (error) {
-      setState(() {
-        isLoading = false; // end loading in case of error
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,44 +94,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   SizedBox(width: 48),
                 ],
               ),
-            ),
-            GestureDetector(
-              onTap: uploadImage,
-              child: isLoading
-                  ? CircularProgressIndicator()
-                  : StreamBuilder<DocumentSnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(auth.currentUser!.uid)
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<DocumentSnapshot> snapshot) {
-                        if (snapshot.hasError) {
-                          return const CircleAvatar(
-                            radius: 75,
-                            backgroundImage:
-                                NetworkImage('https://via.placeholder.com/150'),
-                          );
-                        }
-
-                        if (snapshot.connectionState ==
-                            ConnectionState.active) {
-                          Map<String, dynamic>? data =
-                              snapshot.data?.data() as Map<String, dynamic>?;
-                          String? imageUrl = data?['imageUrl'];
-                          return CircleAvatar(
-                            radius: 75,
-                            backgroundImage: imageUrl != null
-                                ? NetworkImage(imageUrl)
-                                : const NetworkImage(
-                                    'https://via.placeholder.com/150'),
-                          );
-                        }
-
-                        // When the stream is still loading, show a loading indicator
-                        return const CircularProgressIndicator();
-                      },
-                    ),
             ),
             const SizedBox(height: 25),
             MyTextField(

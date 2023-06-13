@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app/components/my_button.dart';
 import 'package:workout_app/components/my_textfield.dart';
-import 'package:workout_app/components/my_button.dart';
 import 'package:workout_app/components/square_tile.dart';
 import 'package:workout_app/services/auth_service.dart';
 

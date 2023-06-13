@@ -1,5 +1,4 @@
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:workout_app/pages/register_page.dart';
 
 import 'login_page.dart';

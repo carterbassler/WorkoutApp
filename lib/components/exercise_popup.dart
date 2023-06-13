@@ -89,7 +89,10 @@ class ExercisePopupMenu extends StatelessWidget {
           );
         }
       },
-      color: Colors.grey[900],
+      color: Color(0xFF2E2C3A),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0))
+      ),
       itemBuilder: (BuildContext context) => [
         PopupMenuItem(
           value: 'rename',

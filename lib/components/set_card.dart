@@ -37,7 +37,6 @@ class CustomSetWidget extends StatelessWidget {
             onDismissed();
           },
           background: Container(
-            margin: EdgeInsets.fromLTRB(4, 4, 12, 4),
             decoration: BoxDecoration(
               color: Colors.red,
               borderRadius: BorderRadius.circular(10),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +22,17 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
   List<List<TextEditingController>> repsControllers = [];
   bool isEditing = false;
   TextEditingController workoutNameController = TextEditingController();
+  StreamController<int> _durationStreamController = StreamController<int>();
+  int durationInSeconds = 0;
 
   @override
   void initState() {
     super.initState();
+    if(widget.first.firstEdit == true) {
+      startDurationCounter();
+    } else {
+      _durationStreamController.add(widget.first.duration);
+    }
     // Initialize a controller for each aSet in each exercise
     for (var exercise in widget.first.exercises) {
       List<TextEditingController> weightControllersInExercise = [];
@@ -39,6 +48,27 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
       weightControllers.add(weightControllersInExercise);
       repsControllers.add(repsControllersInExercise);
     }
+  }
+
+  @override
+  void dispose() {
+    _durationStreamController.close();
+    super.dispose();
+  }
+
+  void startDurationCounter() {
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        durationInSeconds++; // Increment the duration by 1 second
+      });
+      _durationStreamController.add(durationInSeconds);
+    });
+  }
+
+  String formatDuration(int durationInSeconds) {
+    int minutes = durationInSeconds ~/ 60;
+    int seconds = durationInSeconds % 60;
+    return '$minutes:${seconds.toString().padLeft(2, '0')}'; // Format the duration as "mm:ss"
   }
 
   @override
@@ -90,7 +120,7 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
       // Create a map representing the workout
       Map<String, dynamic> workoutMap = {
         'name': workout.name,
-        'duration': workout.duration,
+        'duration': durationInSeconds,
         'exercises': workout.exercises
             .map((e) => {
                   'name': e.name,
@@ -103,6 +133,8 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
                       .toList(),
                 })
             .toList(),
+          'date' : workout.date,
+          'firstEdit' : false,
       };
 
       String workoutId = widget.first.id ?? '';
@@ -239,6 +271,33 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
                     ),
                   ),
                 ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: StreamBuilder<int>(
+                stream: _durationStreamController.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(
+                      'Duration: ${formatDuration(snapshot.data!)}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    );
+                  } else {
+                    return Text(
+                      'Duration: 0:00',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    );
+                  }
+                },
               ),
             ),
             Expanded(

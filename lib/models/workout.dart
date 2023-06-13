@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app/models/set.dart';
 
@@ -7,14 +8,18 @@ import 'exercise.dart';
 class Workout {
   String name;
   final List<Exercise> exercises;
-  final String duration;
+  final int duration;
   String? id;
+  Timestamp date;
+  bool firstEdit;
 
   Workout({
     required this.name, 
     required this.exercises,
     required this.duration,
     this.id,
+    required this.date,
+    required this.firstEdit,
   });
 
   //Add an Exercise to a Workout
