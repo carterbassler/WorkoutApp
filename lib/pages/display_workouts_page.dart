@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:workout_app/components/timing_card.dart';
 import 'package:workout_app/models/exercise.dart';
 
+import '../components/time/time_selector.dart';
 import '../components/workout_overview_card.dart';
 import '../models/set.dart';
 import '../models/workout.dart';
@@ -24,6 +26,29 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
       },
     );
   }
+
+  void showTimeDialog(BuildContext context, Workout workout) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return TimingCard(workout: workout);
+      },
+    );
+  }
+
+  String findCurrentDuration(Workout workout) {
+      Duration duration;
+      duration = workout.end!.toDate().difference(workout.start.toDate());
+
+      String hours = duration.inHours.toString();
+      String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
+      String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+
+      String output = hours + ":" + minutes + ":" + seconds;
+      return output;
+    }
+
+  
 
   void removeWorkout(Workout workout) {
     // Delete the document from the 'workouts' collection of the current user
@@ -120,7 +145,8 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
                       // Create a Workout object based on the retrieved data
                       return Workout(
                         name: data['name'],
-                        duration: data['duration'],
+                        start : data['start'],
+                        end : data['end'], 
                         exercises: exercises,
                         id: doc.id,
                         date: data['date'],
@@ -177,8 +203,7 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
                                                 alignment:
                                                     AlignmentDirectional(-1, 0),
                                                 child: Text(
-                                                    formatTimestamp(
-                                                        workout.date),
+                                                    formatTimestamp(workout.date),
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 18,
@@ -203,16 +228,17 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
                                                   itemBuilder:
                                                       (BuildContext context) =>
                                                           [
-                                                    // PopupMenuItem(
-                                                    //   child: ListTile(
-                                                    //     title: Text(
-                                                    //       'Save as Template',
-                                                    //       style: TextStyle(
-                                                    //         color: Colors.white,
-                                                    //       ),
-                                                    //     ),
-                                                    //   ),
-                                                    // ),
+                                                    PopupMenuItem(
+                                                      value : 'duration',
+                                                      child: ListTile(
+                                                        title: Text(
+                                                          'Change Duration',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
                                                     PopupMenuItem(
                                                       value: 'delete',
                                                       child: ListTile(
@@ -230,8 +256,8 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
                                                       case 'delete':
                                                         removeWorkout(workout);
                                                         break;
-                                                      case 'save':
-                                                        // Handle save action
+                                                      case 'duration':
+                                                        showTimeDialog(context, workout);
                                                         break;
                                                     }
                                                   },
@@ -259,14 +285,9 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
                                               Container(
                                                   child: Row(
                                                 children: [
-                                                  Icon(
-                                                    Icons.timer,
-                                                    color: Colors.white,
-                                                    size: 24,
-                                                  ),
+                                                  Text('⏰', style : TextStyle(fontSize: 20)),
                                                   Text(
-                                                      formatDuration(
-                                                          workout.duration),
+                                                      findCurrentDuration(workout),
                                                       style: TextStyle(
                                                           color: Colors.white))
                                                 ],
@@ -278,11 +299,7 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
                                                         horizontal: 8),
                                                 child: Row(
                                                   children: [
-                                                    Icon(
-                                                      Icons.center_focus_strong,
-                                                      color: Colors.white,
-                                                      size: 24,
-                                                    ),
+                                                    Text('💪', style : TextStyle(fontSize: 20)),
                                                     Text(
                                                         workout.exercises.length
                                                                 .toString() +

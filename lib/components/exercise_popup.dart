@@ -34,7 +34,7 @@ class ExercisePopupMenu extends StatelessWidget {
               exerciseNameController.text =
                   workout.exercises[exerciseIndex].name;
               return AlertDialog(
-                backgroundColor: Color(0xFF1b1a22),
+                backgroundColor: Color(0xFF2E2C3A),
                 title: const Text(
                   "Rename Exercise",
                   style: TextStyle(color: Colors.white),
@@ -50,13 +50,13 @@ class ExercisePopupMenu extends StatelessWidget {
                         const SizedBox(height: 10),
                         TextFormField(
                           controller: exerciseNameController,
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.black),
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             filled: true,
-                            fillColor: Colors.grey[900],
+                            fillColor: Colors.white,
                           ),
                         ),
                       ],
@@ -84,6 +84,10 @@ class ExercisePopupMenu extends StatelessWidget {
                     ),
                   ),
                 ],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      15.0), // Set your desired radius here
+                ),
               );
             },
           );
@@ -91,8 +95,7 @@ class ExercisePopupMenu extends StatelessWidget {
       },
       color: Color(0xFF2E2C3A),
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15.0))
-      ),
+          borderRadius: BorderRadius.all(Radius.circular(15.0))),
       itemBuilder: (BuildContext context) => [
         PopupMenuItem(
           value: 'rename',

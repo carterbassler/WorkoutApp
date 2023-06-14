@@ -22,17 +22,12 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
   List<List<TextEditingController>> repsControllers = [];
   bool isEditing = false;
   TextEditingController workoutNameController = TextEditingController();
-  StreamController<int> _durationStreamController = StreamController<int>();
-  int durationInSeconds = 0;
+  String currentDuration = "";
 
   @override
   void initState() {
     super.initState();
-    if(widget.first.firstEdit == true) {
-      startDurationCounter();
-    } else {
-      _durationStreamController.add(widget.first.duration);
-    }
+    currentDuration = findCurrentDuration();
     // Initialize a controller for each aSet in each exercise
     for (var exercise in widget.first.exercises) {
       List<TextEditingController> weightControllersInExercise = [];
@@ -50,19 +45,35 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
     }
   }
 
-  @override
-  void dispose() {
-    _durationStreamController.close();
-    super.dispose();
+  String findCurrentDuration() {
+      Duration duration;
+
+      if (widget.first.end == null) {
+        DateTime tempEnd = DateTime.now();
+        duration = tempEnd.difference(widget.first.start.toDate());
+      } else {
+        duration =
+            widget.first.end!.toDate().difference(widget.first.start.toDate());
+      }
+
+      String hours = duration.inHours.toString();
+      String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
+      String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+
+      String output = hours + ":" + minutes + ":" + seconds;
+      return output;
+    }
+
+  Stream<String> durationStream() async* {
+    while (true) {
+      await Future.delayed(Duration(seconds: 1));
+      yield findCurrentDuration();
+    }
   }
 
-  void startDurationCounter() {
-    Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        durationInSeconds++; // Increment the duration by 1 second
-      });
-      _durationStreamController.add(durationInSeconds);
-    });
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   String formatDuration(int durationInSeconds) {
@@ -120,7 +131,8 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
       // Create a map representing the workout
       Map<String, dynamic> workoutMap = {
         'name': workout.name,
-        'duration': durationInSeconds,
+        'start': workout.start,
+        'end': DateTime.now(),
         'exercises': workout.exercises
             .map((e) => {
                   'name': e.name,
@@ -133,8 +145,8 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
                       .toList(),
                 })
             .toList(),
-          'date' : workout.date,
-          'firstEdit' : false,
+        'date': workout.date,
+        'firstEdit': false,
       };
 
       String workoutId = widget.first.id ?? '';
@@ -274,32 +286,32 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: StreamBuilder<int>(
-                stream: _durationStreamController.stream,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(
-                      'Duration: ${formatDuration(snapshot.data!)}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    );
-                  } else {
-                    return Text(
-                      'Duration: 0:00',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    );
-                  }
-                },
-              ),
-            ),
+        padding: const EdgeInsets.all(8.0),
+        child: StreamBuilder<String>(
+          stream: durationStream(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(
+                snapshot.data!,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              );
+            } else {
+              return Text(
+                'Loading...',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              );
+            }
+          },
+        ),
+      ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(

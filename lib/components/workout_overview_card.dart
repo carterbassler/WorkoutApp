@@ -15,7 +15,7 @@ class WorkoutOverviewCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0), // rounded corners
       ),
-      backgroundColor: Color(0xFF1b1a22), // theme background color
+      backgroundColor: Color(0xFF2E2C3A), // theme background color
       title: Text(
         "Workout Overview",
         style: TextStyle(color: Colors.white),

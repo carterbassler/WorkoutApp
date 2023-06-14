@@ -29,7 +29,7 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Workout newWorkout = Workout(name: "", duration: 0, exercises: [], date : timestamp, firstEdit: true);
+    Workout newWorkout = Workout(name: "", start : timestamp, exercises: [], date : timestamp, firstEdit: true);
     return Scaffold(
       backgroundColor: Color(0xFF1B1A22),
       body: SafeArea(
@@ -232,9 +232,9 @@ class MainPage extends StatelessWidget {
                         //   ),
                         // ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 50),
+                          padding: EdgeInsets.symmetric(vertical: 120),
                           child: Lottie.network(
-                            'https://assets8.lottiefiles.com/packages/lf20_aTalnSBaLW.json'
+                            'https://assets4.lottiefiles.com/packages/lf20_JkRdsa6Exx.json'
                           ),
                         ),
                         Padding(

@@ -4,8 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:workout_app/components/my_button.dart';
 
@@ -78,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
     // DateTime accountCreationDate = DateTime.fromMillisecondsSinceEpoch(
     //     creationTime!.millisecondsSinceEpoch);
     return Scaffold(
-        backgroundColor: Color(0xFF1b1a22),
+        backgroundColor: const Color(0xFF1b1a22),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -88,19 +86,19 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Container(
                   width: 494,
                   height: 80,
-                  decoration: BoxDecoration(),
+                  decoration: const BoxDecoration(),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.exit_to_app_rounded,
                             color: Colors.transparent,
                             size: 24,
                           ),
                           onPressed: () async {}),
-                      Text(
+                      const Text(
                         'Profile',
                         style: TextStyle(
                           fontSize: 20,
@@ -108,7 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       IconButton(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.exit_to_app_rounded,
                             color: Colors.white,
                             size: 24,
@@ -132,7 +130,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         AsyncSnapshot<DocumentSnapshot> snapshot) {
                       if (snapshot.hasError) {
                         return Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                           child: Container(
                             width: 150,
                             height: 142,
@@ -144,28 +143,29 @@ class _ProfilePageState extends State<ProfilePage> {
                                   width: 120,
                                   height: 120,
                                   clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                   ),
-                                  child: CircleAvatar(
+                                  child: const CircleAvatar(
                                     radius: 70,
                                     backgroundImage: NetworkImage(
                                         'https://via.placeholder.com/150'),
                                   ),
                                 ),
                                 Align(
-                                  alignment: AlignmentDirectional(0, 1),
+                                  alignment: const AlignmentDirectional(0, 1),
                                   child: Container(
                                     width: 30,
                                     height: 30,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       color: Color(0xFFFD6750),
                                       shape: BoxShape.circle,
                                     ),
                                     child: Align(
-                                        alignment: AlignmentDirectional(0, 0),
+                                        alignment:
+                                            const AlignmentDirectional(0, 0),
                                         child: IconButton(
-                                          icon: Icon(
+                                          icon: const Icon(
                                             Icons.mode_edit,
                                             size: 20,
                                             color: Colors.white,
@@ -185,19 +185,20 @@ class _ProfilePageState extends State<ProfilePage> {
                             snapshot.data?.data() as Map<String, dynamic>?;
                         String? imageUrl = data?['imageUrl'];
                         return Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                           child: Container(
                             width: 150,
                             height: 142,
-                            decoration: BoxDecoration(),
+                            decoration: const BoxDecoration(),
                             child: Stack(
-                              alignment: AlignmentDirectional(0, 0),
+                              alignment: const AlignmentDirectional(0, 0),
                               children: [
                                 Container(
                                   width: 120,
                                   height: 120,
                                   clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                   ),
                                   child: CircleAvatar(
@@ -209,17 +210,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                                 Align(
-                                  alignment: AlignmentDirectional(0, 1),
+                                  alignment: const AlignmentDirectional(0, 1),
                                   child: GestureDetector(
                                     onTap: uploadImage,
                                     child: Container(
                                       width: 30,
                                       height: 30,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         color: Color(0xFFFD6750),
                                         shape: BoxShape.circle,
                                       ),
-                                      child: Center(
+                                      child: const Center(
                                         child: Icon(
                                           Icons.mode_edit,
                                           size: 20,
@@ -240,160 +241,187 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Text(
-                      'Carter Bassler',
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      'carterbassler101@gmail.com',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              MyButton(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return EditProfilePage();
-                    }));
-                  },
-                  text: "Edit Profile"),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(30, 10, 30, 10),
-                child: Container(
-                  width: 550,
-                  height: 100,
-                  decoration: BoxDecoration(),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical : 4.0),
-                              child: FaIcon(
-                                FontAwesomeIcons.weight,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                            ),
-                            Text(
-                              '175',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(
-                              'Weight',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
+              StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(auth.currentUser!.uid)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+                    if (snapshot.connectionState == ConnectionState.active) {
+                      Map<String, dynamic>? data =
+                          snapshot.data?.data() as Map<String, dynamic>?;
+                      String? name = data?['first-last-name'];
+                      String? age = data?['age'];
+                      String? height = data?['height'];
+                      String? weight = data?['weight'];
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Column(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical : 4.0),
-                                  child: FaIcon(
-                                    FontAwesomeIcons.textHeight,
+                                Text(
+                                  (name ?? ''),
+                                  style: TextStyle(
+                                    fontSize: 25,
                                     color: Colors.white,
-                                    size: 24,
                                   ),
                                 ),
                                 Text(
-                                  '5\'9',
+                                  (auth.currentUser?.email ?? ''),
                                   style: TextStyle(
+                                    fontSize: 20,
                                     color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                Text(
-                                  'Height',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
                                   ),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical : 4.0),
-                                  child: FaIcon(
-                                    FontAwesomeIcons.pagelines,
-                                    color: Colors.white,
-                                    size: 24,
+                          ),
+                          MyButton(
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return EditProfilePage();
+                                }));
+                              },
+                              text: "Edit Profile"),
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                30, 10, 30, 10),
+                            child: Container(
+                              width: 550,
+                              height: 100,
+                              decoration: const BoxDecoration(),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: const BoxDecoration(),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 4.0),
+                                          child: Text('🏋️',
+                                              style: TextStyle(fontSize: 35)),
+                                        ),
+                                        Text(
+                                          (weight ?? ''),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Weight',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  '21',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
+                                  Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: const BoxDecoration(),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 4.0),
+                                              child: Text('👤',
+                                                  style:
+                                                      TextStyle(fontSize: 35)),
+                                            ),
+                                            Text(
+                                              (height ?? ''),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Height',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  'Age',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
+                                  Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: const BoxDecoration(),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 4.0),
+                                              child: Text('🎂',
+                                                  style:
+                                                      TextStyle(fontSize: 35)),
+                                            ),
+                                            Text(
+                                              (age ?? ''),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Age',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                          ),
+                        ],
+                      );
+                    }
+                    return const CircularProgressIndicator();
+                  }),
             ]),
           ),
         ));

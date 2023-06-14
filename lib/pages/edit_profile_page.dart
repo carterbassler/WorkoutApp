@@ -15,6 +15,8 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final items = ['one', 'two', 'three', 'four'];
+  String? value;
 
   final nameController = TextEditingController();
   final ageController = TextEditingController();
@@ -107,6 +109,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
               hintText: "Age",
               hiddenText: false,
             ),
+            Container(
+  width: 375,
+  padding: const EdgeInsets.symmetric(horizontal: 25),
+  decoration: BoxDecoration(
+    color: Colors.white, // Fill color
+    borderRadius: BorderRadius.circular(10), // Rounded edges
+    border: Border.all(color: Colors.black, width: 1) // Border color
+  ),
+  child: DropdownButtonHideUnderline(
+    child: DropdownButton<String>(
+      isExpanded: true,
+      items: items.map(buildMenuItem).toList(),
+      onChanged: (value) => this.value = value,
+    ),
+  ),
+),
             const SizedBox(height: 25),
             MyTextField(
               controller: heightController,
@@ -120,10 +138,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
               hiddenText: false,
             ),
             const SizedBox(height: 25),
-            MyButton(onTap: finishProfileSetup, text : "Save Changes"),
+            MyButton(onTap: finishProfileSetup, text: "Save Changes"),
           ],
         ),
       ),
     );
   }
+
+  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+          style : TextStyle(
+            fontSize: 20,
+            color : Colors.black 
+          )
+          ),
+      );
 }
