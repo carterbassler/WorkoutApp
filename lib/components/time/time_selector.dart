@@ -5,21 +5,52 @@ import 'package:workout_app/components/time/minutes.dart';
 
 class TimeSelect extends StatefulWidget {
   final ValueChanged<String> onTimeChanged;
-  TimeSelect({Key? key, required this.onTimeChanged}) : super(key: key);
-
+  final String time;
+  TimeSelect({Key? key, required this.onTimeChanged, required this.time})
+      : super(key: key);
   @override
   _TimeSelectState createState() => _TimeSelectState();
 }
 
 class _TimeSelectState extends State<TimeSelect> {
-  int _selectedHoursIndex = 0;
+  int _selectedHoursIndex = 1;
   int _selectedMinsIndex = 0;
   int _selectedAmPmIndex = 0;
+  FixedExtentScrollController? _hoursController;
+  FixedExtentScrollController? _minsController;
+  FixedExtentScrollController? _amPmController;
+
+  @override
+  void initState() {
+    super.initState();
+    String timeStr = widget.time;
+
+    RegExp regExp = new RegExp(r"(\d+):(\d+) (AM|PM)");
+
+    Match? match = regExp.firstMatch(timeStr);
+
+    if (match != null) {
+      String hourStr = match.group(1)!;
+      String minuteStr = match.group(2)!;
+      String periodStr = match.group(3)!;
+      int hour = int.parse(hourStr);
+      int min = int.parse(minuteStr);
+      int period = periodStr == "AM" ? 0 : 1;
+      _selectedHoursIndex = hour;
+      _selectedMinsIndex = min;
+      _selectedAmPmIndex = period;
+      _hoursController = FixedExtentScrollController(initialItem: hour - 1);
+      _minsController = FixedExtentScrollController(initialItem: min);
+      _amPmController = FixedExtentScrollController(initialItem: period);
+    }
+  }
 
   void _onSelectedItemChanged() {
-  final selectedTime = '$_selectedHoursIndex:${_selectedMinsIndex.toString().padLeft(2, '0')} ${_selectedAmPmIndex == 0 ? 'AM' : 'PM'}';
-  widget.onTimeChanged(selectedTime); // send selected time back to parent widget
-}
+    final selectedTime =
+        '${_selectedHoursIndex == 0 ? 12 : _selectedHoursIndex}:${_selectedMinsIndex.toString().padLeft(2, '0')} ${_selectedAmPmIndex == 0 ? 'AM' : 'PM'}';
+    widget.onTimeChanged(
+        selectedTime); // send selected time back to parent widget
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +63,11 @@ class _TimeSelectState extends State<TimeSelect> {
           Container(
             width: 70,
             child: ListWheelScrollView.useDelegate(
+              controller : _hoursController,
               onSelectedItemChanged: (value) {
                 setState(() {
-                  _selectedHoursIndex = value;
+                  _selectedHoursIndex =
+                      value + 1; // add 1 to the selected hour index
                 });
                 _onSelectedItemChanged();
               },
@@ -43,12 +76,12 @@ class _TimeSelectState extends State<TimeSelect> {
               diameterRatio: 1.2,
               physics: FixedExtentScrollPhysics(),
               childDelegate: ListWheelChildBuilderDelegate(
-                childCount: 13,
+                childCount: 12, // reduce childCount to 12
                 builder: (context, index) {
-                  index = index;
                   return MyHours(
-                    hours: index,
-                    isSelected: index == _selectedHoursIndex,
+                    hours: index + 1, // add 1 to the hours index
+                    isSelected: index + 1 ==
+                        _selectedHoursIndex, // compare with index + 1
                   );
                 },
               ),
@@ -58,6 +91,7 @@ class _TimeSelectState extends State<TimeSelect> {
           Container(
             width: 70,
             child: ListWheelScrollView.useDelegate(
+              controller : _minsController,
               onSelectedItemChanged: (value) {
                 setState(() {
                   _selectedMinsIndex = value;
@@ -83,6 +117,7 @@ class _TimeSelectState extends State<TimeSelect> {
           Container(
             width: 70,
             child: ListWheelScrollView.useDelegate(
+              controller: _amPmController,
               onSelectedItemChanged: (value) {
                 setState(() {
                   _selectedAmPmIndex = value;

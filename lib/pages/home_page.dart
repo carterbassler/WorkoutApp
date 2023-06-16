@@ -1,8 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
-import '../components/time/time_selector.dart';
 import 'display_workouts_page.dart';
 import 'main_page.dart';
 import 'profile_page.dart';

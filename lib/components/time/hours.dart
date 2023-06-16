@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyHours extends StatelessWidget {
-  int hours;
-  bool isSelected;
+  final int hours;
+  final bool isSelected;
   
   MyHours( {super.key, required this.hours, required this.isSelected});
 

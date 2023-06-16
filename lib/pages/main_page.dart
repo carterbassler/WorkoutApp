@@ -10,7 +10,6 @@ import 'package:lottie/lottie.dart';
 
 class MainPage extends StatelessWidget {
   MainPage({super.key});
-  Timestamp timestamp = Timestamp.fromDate(DateTime.now());
 
   String timeOfDay() {
   var hour = DateTime.now().hour;
@@ -29,7 +28,8 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Workout newWorkout = Workout(name: "", start : timestamp, exercises: [], date : timestamp, firstEdit: true);
+    Timestamp timestamp = Timestamp.fromDate(DateTime.now());
+    Workout newWorkout = Workout(name: "", exercises: [], date : timestamp, firstEdit: true);
     return Scaffold(
       backgroundColor: Color(0xFF1B1A22),
       body: SafeArea(

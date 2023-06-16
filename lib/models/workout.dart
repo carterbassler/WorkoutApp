@@ -8,7 +8,7 @@ import 'exercise.dart';
 class Workout {
   String name;
   final List<Exercise> exercises;
-  Timestamp start;
+  Timestamp? start;
   Timestamp? end;
   String? id;
   Timestamp date;
@@ -17,7 +17,7 @@ class Workout {
   Workout({
     required this.name, 
     required this.exercises,
-    required this.start,
+    this.start,
     this.end,
     this.id,
     required this.date,

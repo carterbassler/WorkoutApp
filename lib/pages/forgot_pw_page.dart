@@ -37,32 +37,60 @@ final emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       backgroundColor: Color(0xFF1b1a22),
-      body : Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [  
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal:25),
-            child: Text(
-              "Enter your email and we will send you a new password",
-              textAlign: TextAlign.center,
-              style : TextStyle(fontSize: 20, color : Colors.white),
+      body : SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [  
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Color(0xFF1b1a22),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                ],
               ),
+              SizedBox(height : 50),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:25),
+                child: Text(
+                  "Enter your email and we will send you a new password",
+                  textAlign: TextAlign.center,
+                  style : TextStyle(fontSize: 20, color : Colors.white),
+                  ),
+              ),
+              const SizedBox(height:25),
+              MyTextField(
+                        controller: emailController,
+                        hintText: "Email",
+                        hiddenText: false,
+                      ),
+              
+              const SizedBox(height:25),
+              MyButton(
+                        onTap: sendPasswordReset,
+                        text: "Send Reset Link"
+                      ),
+            ],
           ),
-          const SizedBox(height:25),
-          MyTextField(
-                    controller: emailController,
-                    hintText: "Email",
-                    hiddenText: false,
-                  ),
-
-          const SizedBox(height:25),
-          MyButton(
-                    onTap: sendPasswordReset,
-                    text: "Sign In"
-                  ),
-        ],
+        ),
       ),
     ); 
   }

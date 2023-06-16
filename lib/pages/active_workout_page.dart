@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:workout_app/components/timing_card.dart';
 
 import '../components/exercise_popup.dart';
 import '../components/other_button.dart';
@@ -22,12 +23,12 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
   List<List<TextEditingController>> repsControllers = [];
   bool isEditing = false;
   TextEditingController workoutNameController = TextEditingController();
-  String currentDuration = "";
 
   @override
   void initState() {
     super.initState();
-    currentDuration = findCurrentDuration();
+    Timestamp timestamp = Timestamp.fromDate(DateTime.now());
+    if(widget.first.start == null) widget.first.start = timestamp;
     // Initialize a controller for each aSet in each exercise
     for (var exercise in widget.first.exercises) {
       List<TextEditingController> weightControllersInExercise = [];
@@ -45,24 +46,33 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
     }
   }
 
+  void showTimeDialog(BuildContext context, Workout workout) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return TimingCard(workout: workout);
+      },
+    );
+  }
+
   String findCurrentDuration() {
-      Duration duration;
+    Duration duration;
 
-      if (widget.first.end == null) {
-        DateTime tempEnd = DateTime.now();
-        duration = tempEnd.difference(widget.first.start.toDate());
-      } else {
-        duration =
-            widget.first.end!.toDate().difference(widget.first.start.toDate());
-      }
-
-      String hours = duration.inHours.toString();
-      String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
-      String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
-
-      String output = hours + ":" + minutes + ":" + seconds;
-      return output;
+    if (widget.first.end == null) {
+      DateTime tempEnd = DateTime.now();
+      duration = tempEnd.difference(widget.first.start!.toDate());
+    } else {
+      duration =
+          widget.first.end!.toDate().difference(widget.first.start!.toDate());
     }
+
+    String hours = duration.inHours.toString();
+    String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
+    String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+
+    String output = hours + ":" + minutes + ":" + seconds;
+    return output;
+  }
 
   Stream<String> durationStream() async* {
     while (true) {
@@ -132,7 +142,7 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
       Map<String, dynamic> workoutMap = {
         'name': workout.name,
         'start': workout.start,
-        'end': DateTime.now(),
+        'end': workout.end ?? DateTime.now(),
         'exercises': workout.exercises
             .map((e) => {
                   'name': e.name,
@@ -196,7 +206,7 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
                     },
                   ),
                   Text(
-                    'Current Workout',
+                    workout.end == null ? 'Current Workout' : 'Past Workout',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -286,32 +296,53 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
               ),
             ),
             Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: StreamBuilder<String>(
-          stream: durationStream(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Text(
-                snapshot.data!,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              );
-            } else {
-              return Text(
-                'Loading...',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              );
-            }
-          },
-        ),
-      ),
+              padding: const EdgeInsets.all(8.0),
+              child: StreamBuilder<String>(
+                stream: durationStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (workout.end == null) {
+                      return Text(
+                        snapshot.data!,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      );
+                    } else {
+                      return GestureDetector(
+                        onTap: () => showTimeDialog(context, workout),
+                        child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFfd6750),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            snapshot.data!,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  } else {
+                    return Text(
+                      'Loading...',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(

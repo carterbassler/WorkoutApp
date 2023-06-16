@@ -1,14 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
-import 'package:workout_app/components/my_button.dart';
 import 'package:workout_app/components/time/time_selector.dart';
 
 import '../models/workout.dart';
-import '../pages/active_workout_page.dart';
 
 class TimingCard extends StatefulWidget {
   final Workout workout;
@@ -30,8 +26,8 @@ class _TimingCardState extends State<TimingCard> {
   @override
   void initState() {
     super.initState();
-    Timestamp tempStart = widget.workout.start;
-    final DateTime date = tempStart.toDate();
+    Timestamp? tempStart = widget.workout.start;
+    final DateTime date = tempStart!.toDate();
     final format = DateFormat.jm();
     final formattedDate = format.format(date);
     startTime = formattedDate;
@@ -42,6 +38,27 @@ class _TimingCardState extends State<TimingCard> {
     final formattedDate2 = format2.format(date2);
     endTime = formattedDate2;
   }
+
+  void saveTiming() {
+    final format = DateFormat.jm(); // Your time format
+
+    // Convert String to DateTime
+    DateTime startTimeDate = format.parse(startTime);
+    DateTime endTimeDate = format.parse(endTime);
+
+    // Make sure the date part is today
+    DateTime now = DateTime.now();
+    startTimeDate = DateTime(now.year, now.month, now.day, startTimeDate.hour, startTimeDate.minute);
+    endTimeDate = DateTime(now.year, now.month, now.day, endTimeDate.hour, endTimeDate.minute);
+
+    // Convert DateTime to Timestamp and store in workout object
+    setState(() {
+      widget.workout.start = Timestamp.fromDate(startTimeDate);
+      widget.workout.end = Timestamp.fromDate(endTimeDate);
+    });
+
+    Navigator.pop(context);
+}
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +90,7 @@ class _TimingCardState extends State<TimingCard> {
             children: <Widget>[
               TimeSelect(
                   onTimeChanged: (selectedTime) =>
-                      setState(() => startTime = selectedTime))
+                      setState(() => startTime = selectedTime), time : startTime)
             ], // use callback
           ),
           ExpansionTile(
@@ -91,13 +108,13 @@ class _TimingCardState extends State<TimingCard> {
             children: <Widget>[
               TimeSelect(
                   onTimeChanged: (selectedTime) =>
-                      setState(() => endTime = selectedTime))
+                      setState(() => endTime = selectedTime), time : endTime)
             ], // use callback
           ),
           SizedBox(height:10),
           GestureDetector(
             onTap: () => {
-              print("WORKING"),
+              saveTiming(),
             },
             child: Container(
               height: 40, // Set the height

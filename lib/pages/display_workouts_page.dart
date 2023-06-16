@@ -2,10 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:workout_app/components/timing_card.dart';
 import 'package:workout_app/models/exercise.dart';
-
-import '../components/time/time_selector.dart';
 import '../components/workout_overview_card.dart';
 import '../models/set.dart';
 import '../models/workout.dart';
@@ -27,28 +24,17 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
     );
   }
 
-  void showTimeDialog(BuildContext context, Workout workout) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return TimingCard(workout: workout);
-      },
-    );
-  }
-
   String findCurrentDuration(Workout workout) {
-      Duration duration;
-      duration = workout.end!.toDate().difference(workout.start.toDate());
+    Duration duration;
+    duration = workout.end!.toDate().difference(workout.start!.toDate());
 
-      String hours = duration.inHours.toString();
-      String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
-      String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+    String hours = duration.inHours.toString();
+    String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
+    String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
 
-      String output = hours + ":" + minutes + ":" + seconds;
-      return output;
-    }
-
-  
+    String output = hours + ":" + minutes + ":" + seconds;
+    return output;
+  }
 
   void removeWorkout(Workout workout) {
     // Delete the document from the 'workouts' collection of the current user
@@ -145,8 +131,8 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
                       // Create a Workout object based on the retrieved data
                       return Workout(
                         name: data['name'],
-                        start : data['start'],
-                        end : data['end'], 
+                        start: data['start'],
+                        end: data['end'],
                         exercises: exercises,
                         id: doc.id,
                         date: data['date'],
@@ -192,79 +178,76 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
                                     padding: const EdgeInsets.all(10.0),
                                     child: Column(
                                       children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(4.0),
-                                              child: Align(
-                                                alignment:
-                                                    AlignmentDirectional(-1, 0),
-                                                child: Text(
-                                                    formatTimestamp(workout.date),
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18,
-                                                    )),
-                                              ),
-                                            ),
-                                            Align(
-                                              child: Padding(
+                                        Container(
+                                          // decoration: BoxDecoration(
+                                          //   border: Border.all(
+                                          //       color: Colors.red, width: 2),
+                                          // ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
                                                 padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: PopupMenuButton(
-                                                  icon: Icon(
-                                                    Icons.more_vert,
-                                                    color: Colors.white,
-                                                  ),
-                                                  color: Color(0xFF2E2C3A),
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  15.0))),
-                                                  itemBuilder:
-                                                      (BuildContext context) =>
-                                                          [
-                                                    PopupMenuItem(
-                                                      value : 'duration',
-                                                      child: ListTile(
-                                                        title: Text(
-                                                          'Change Duration',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    PopupMenuItem(
-                                                      value: 'delete',
-                                                      child: ListTile(
-                                                        title: Text(
-                                                          'Delete Workout',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                  onSelected: (value) {
-                                                    switch (value) {
-                                                      case 'delete':
-                                                        removeWorkout(workout);
-                                                        break;
-                                                      case 'duration':
-                                                        showTimeDialog(context, workout);
-                                                        break;
-                                                    }
-                                                  },
+                                                    const EdgeInsets.all(2.0),
+                                                child: Align(
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          -1, 0),
+                                                  child: Text(
+                                                      formatTimestamp(
+                                                          workout.date),
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18,
+                                                      )),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              Align(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: PopupMenuButton(
+                                                    padding: EdgeInsets.zero,
+                                                    icon: Icon(
+                                                      Icons.more_vert,
+                                                      color: Colors.white,
+                                                    ),
+                                                    color: Color(0xFF2E2C3A),
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    15.0))),
+                                                    itemBuilder: (BuildContext
+                                                            context) =>
+                                                        [
+                                                      PopupMenuItem(
+                                                        value: 'delete',
+                                                        child: ListTile(
+                                                          title: Text(
+                                                            'Delete Workout',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                    onSelected: (value) {
+                                                      switch (value) {
+                                                        case 'delete':
+                                                          removeWorkout(
+                                                              workout);
+                                                          break;
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(4.0),
@@ -285,9 +268,12 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
                                               Container(
                                                   child: Row(
                                                 children: [
-                                                  Text('⏰', style : TextStyle(fontSize: 20)),
+                                                  Text('⏰',
+                                                      style: TextStyle(
+                                                          fontSize: 20)),
                                                   Text(
-                                                      findCurrentDuration(workout),
+                                                      findCurrentDuration(
+                                                          workout),
                                                       style: TextStyle(
                                                           color: Colors.white))
                                                 ],
@@ -299,7 +285,9 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
                                                         horizontal: 8),
                                                 child: Row(
                                                   children: [
-                                                    Text('💪', style : TextStyle(fontSize: 20)),
+                                                    Text('💪',
+                                                        style: TextStyle(
+                                                            fontSize: 20)),
                                                     Text(
                                                         workout.exercises.length
                                                                 .toString() +

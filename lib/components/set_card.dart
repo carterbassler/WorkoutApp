@@ -31,7 +31,7 @@ class CustomSetWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Dismissible(
-          key: Key('set-$i-$j'),
+          key: Key('set-$i-$j-${DateTime.now().millisecondsSinceEpoch}'),
           direction: DismissDirection.endToStart,
           onDismissed: (direction) {
             onDismissed();

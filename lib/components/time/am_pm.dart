@@ -2,7 +2,7 @@
 
 class AmPm extends StatelessWidget {
   final bool isItAm;
-  bool isSelected;
+  final bool isSelected;
   
   AmPm( {super.key, required this.isItAm, required this.isSelected});
 
