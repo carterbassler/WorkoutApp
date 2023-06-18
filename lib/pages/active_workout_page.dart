@@ -224,77 +224,79 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isEditing = true;
-                  workoutNameController.text = workout.name;
-                });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  isEditing
-                      ? Expanded(
-                          child: TextFormField(
-                            controller: workoutNameController,
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              hintText: 'Workout Name',
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        )
-                      : Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text(
-                              workout.name,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                      Container(
+                        padding: EdgeInsets.all(4),
+                        child: Icon(
+                          isEditing ? Icons.done : Icons.edit,
+                          color: Color(0xFF1b1a22),
+                        ),
+                      ),
+                    isEditing
+                        ? Expanded(
+                            child: TextFormField(
+                              controller: workoutNameController,
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
                               textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                hintText: 'Workout Name',
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          )
+                        : Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text(
+                                workout.name,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (isEditing) {
+                            isEditing = false;
+                            workout.name = workoutNameController.text;
+                          } else {
+                            isEditing = true;
+                            workoutNameController.text = workout.name;
+                          }
+                        });
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color:
+                              isEditing ? Colors.transparent : Colors.transparent,
                         ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (isEditing) {
-                          isEditing = false;
-                          workout.name = workoutNameController.text;
-                        } else {
-                          isEditing = true;
-                          workoutNameController.text = workout.name;
-                        }
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color:
-                            isEditing ? Colors.transparent : Colors.transparent,
-                      ),
-                      child: Icon(
-                        isEditing ? Icons.done : Icons.edit,
-                        color: Colors.white,
+                        child: Icon(
+                          isEditing ? Icons.done : Icons.edit,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: StreamBuilder<String>(
@@ -302,19 +304,22 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (workout.end == null) {
-                      return Text(
-                        snapshot.data!,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      );
+                        return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical : 1),
+                          child: Text(
+                            snapshot.data!,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
                     } else {
                       return GestureDetector(
                         onTap: () => showTimeDialog(context, workout),
                         child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical : 1),
                           decoration: BoxDecoration(
                             color: Color(0xFFfd6750),
                             borderRadius: BorderRadius.circular(10),
