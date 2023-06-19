@@ -12,24 +12,25 @@ class MainPage extends StatelessWidget {
   MainPage({super.key});
 
   String timeOfDay() {
-  var hour = DateTime.now().hour;
-  if (hour < 6) {
-    return "Night";
-  } else if (hour < 12) {
-    return "Morning";
-  } else if (hour < 17) {
-    return "Afternoon";
-  } else if (hour < 20) {
-    return "Evening";
-  } else {
-    return "Night";
+    var hour = DateTime.now().hour;
+    if (hour < 6) {
+      return "Night";
+    } else if (hour < 12) {
+      return "Morning";
+    } else if (hour < 17) {
+      return "Afternoon";
+    } else if (hour < 20) {
+      return "Evening";
+    } else {
+      return "Night";
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
     Timestamp timestamp = Timestamp.fromDate(DateTime.now());
-    Workout newWorkout = Workout(name: "", exercises: [], date : timestamp, firstEdit: true);
+    Workout newWorkout =
+        Workout(name: "", exercises: [], date: timestamp, firstEdit: true);
     return Scaffold(
       backgroundColor: Color(0xFF1B1A22),
       body: SafeArea(
@@ -94,8 +95,8 @@ class MainPage extends StatelessWidget {
                                             ),
                                             Text(
                                               'Good ' + timeOfDay(),
-                                              style:
-                                                  TextStyle(color: Colors.white),
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
                                           ],
                                         ),
@@ -110,7 +111,8 @@ class MainPage extends StatelessWidget {
                                   child: imageUrl != null
                                       ? CircleAvatar(
                                           radius: 70,
-                                          backgroundImage: NetworkImage(imageUrl),
+                                          backgroundImage:
+                                              NetworkImage(imageUrl),
                                         )
                                       : const CircleAvatar(
                                           radius: 70,
@@ -122,119 +124,17 @@ class MainPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // Padding(
-                        //   padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
-                        //   child: Container(
-                        //     width: 486,
-                        //     height: 40,
-                        //     decoration: BoxDecoration(),
-                        //     alignment: AlignmentDirectional(-1, 0),
-                        //     child: Text(
-                        //       'My Workout Templates',
-                        //       style: TextStyle(
-                        //         color: Colors.white,
-                        //         fontSize: 20,
-                        //         ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Padding(
-                        //   padding: EdgeInsetsDirectional.fromSTEB(12, 15, 12, 15),
-                        //   child: Container(
-                        //     width: 435,
-                        //     height: 436,
-                        //     decoration: BoxDecoration(),
-                        //     child: GridView(
-                        //       padding: EdgeInsets.zero,
-                        //       gridDelegate:
-                        //           SliverGridDelegateWithFixedCrossAxisCount(
-                        //         crossAxisCount: 2,
-                        //         crossAxisSpacing: 15,
-                        //         mainAxisSpacing: 15,
-                        //         childAspectRatio: 1,
-                        //       ),
-                        //       scrollDirection: Axis.vertical,
-                        //       children: [
-                        //         Container(
-                        //           width: 100,
-                        //           height: 100,
-                        //           decoration: BoxDecoration(
-                        //             color: Color(0xFF2E2C3A),
-                        //             borderRadius: BorderRadius.circular(10),
-                        //           ),
-                        //           child: Column(
-                        //             mainAxisSize: MainAxisSize.max,
-                        //             children: [
-                        //               Align(
-                        //                 alignment: AlignmentDirectional(0, 0),
-                        //                 child: Padding(
-                        //                   padding: EdgeInsetsDirectional.fromSTEB(
-                        //                       0, 5, 0, 5),
-                        //                   child: Text(
-                        //                     'Chest Day',
-                        //                     style: TextStyle(
-                        //                       color: Colors.white,
-                        //                       fontSize: 20,
-                        //                       ),
-                        //                   ),
-                        //                 ),
-                        //               ),
-                        //               Text(
-                        //                 'Barbell Bench Press',
-                        //                 style: TextStyle(color: Colors.white),
-                        //               ),
-                        //               Text(
-                        //                 'Incline Dumbbell Bench Press',
-                        //                 textAlign: TextAlign.center,
-                        //                 style: TextStyle(color: Colors.white),
-                        //               ),
-                        //               Text(
-                        //                 'Cable Flyes',
-                        //                 style: TextStyle(color: Colors.white),
-                        //               ),
-                        //               Text(
-                        //                 'Tricep PushDown',
-                        //                 style: TextStyle(color: Colors.white),
-                        //               ),
-                        //               Text(
-                        //                 'Skullcrushers',
-                        //                 style: TextStyle(color: Colors.white),
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         ),
-                        //         Container(
-                        //           width: 100,
-                        //           height: 100,
-                        //           decoration: BoxDecoration(
-                        //             color: Color(0xFF2E2C3A),
-                        //             borderRadius: BorderRadius.circular(10),
-                        //           ),
-                        //         ),
-                        //         Container(
-                        //           width: 100,
-                        //           height: 100,
-                        //           decoration: BoxDecoration(
-                        //             color: Color(0xFF2E2C3A),
-                        //             borderRadius: BorderRadius.circular(10),
-                        //           ),
-                        //         ),
-                        //         Container(
-                        //           width: 100,
-                        //           height: 100,
-                        //           decoration: BoxDecoration(
-                        //             color: Color(0xFF2E2C3A),
-                        //             borderRadius: BorderRadius.circular(10),
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: 120),
-                          child: Lottie.network(
-                            'https://assets4.lottiefiles.com/packages/lf20_JkRdsa6Exx.json'
+                          padding: EdgeInsets.symmetric(
+                              vertical:
+                                  MediaQuery.of(context).size.height * 0.04),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width *
+                                0.9, // adjust as needed
+                            height: MediaQuery.of(context).size.height *
+                                0.5, // adjust as needed
+                            child: Lottie.network(
+                                'https://assets4.lottiefiles.com/packages/lf20_JkRdsa6Exx.json'),
                           ),
                         ),
                         Padding(
@@ -246,13 +146,13 @@ class MainPage extends StatelessWidget {
                             child: MyButton(
                               onTap: () {
                                 Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ActiveWorkoutPage(
-                                    first: newWorkout,
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ActiveWorkoutPage(
+                                      first: newWorkout,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
                               },
                               text: 'Start New Workout',
                             ),

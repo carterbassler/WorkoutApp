@@ -85,238 +85,240 @@ class _DisplayWorkoutsPageState extends State<DisplayWorkoutsPage> {
       backgroundColor: Color(0xFF1b1a22),
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                stream: FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                    .collection('workouts')
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                        snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.active) {
-                    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
-                        snapshot.data?.docs ?? [];
-                    List<Workout> workouts = docs.map((doc) {
-                      Map<String, dynamic> data = doc.data();
-                      // Extract exercises data
-                      List<dynamic> exercisesData = data['exercises'] ?? [];
-                      List<Exercise> exercises =
-                          exercisesData.map((exerciseData) {
-                        // Extract sets data
-                        List<dynamic> setsData = exerciseData['sets'] ?? [];
-                        List<aSet> sets = setsData.map((setData) {
-                          // Create a Set object based on the retrieved data
-                          return aSet(
-                            weight: setData['weight'],
-                            numReps: setData['numReps'],
-                            isCompleted: setData['isCompleted'],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .collection('workouts')
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+          
+                    if (snapshot.connectionState == ConnectionState.active) {
+                      List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
+                          snapshot.data?.docs ?? [];
+                      List<Workout> workouts = docs.map((doc) {
+                        Map<String, dynamic> data = doc.data();
+                        // Extract exercises data
+                        List<dynamic> exercisesData = data['exercises'] ?? [];
+                        List<Exercise> exercises =
+                            exercisesData.map((exerciseData) {
+                          // Extract sets data
+                          List<dynamic> setsData = exerciseData['sets'] ?? [];
+                          List<aSet> sets = setsData.map((setData) {
+                            // Create a Set object based on the retrieved data
+                            return aSet(
+                              weight: setData['weight'],
+                              numReps: setData['numReps'],
+                              isCompleted: setData['isCompleted'],
+                            );
+                          }).toList();
+          
+                          // Create an Exercise object based on the retrieved data
+                          return Exercise(
+                            name: exerciseData['name'],
+                            sets: sets,
                           );
                         }).toList();
-
-                        // Create an Exercise object based on the retrieved data
-                        return Exercise(
-                          name: exerciseData['name'],
-                          sets: sets,
+          
+                        // Create a Workout object based on the retrieved data
+                        return Workout(
+                          name: data['name'],
+                          start: data['start'],
+                          end: data['end'],
+                          exercises: exercises,
+                          id: doc.id,
+                          date: data['date'],
+                          firstEdit: data['firstEdit'],
                         );
                       }).toList();
-
-                      // Create a Workout object based on the retrieved data
-                      return Workout(
-                        name: data['name'],
-                        start: data['start'],
-                        end: data['end'],
-                        exercises: exercises,
-                        id: doc.id,
-                        date: data['date'],
-                        firstEdit: data['firstEdit'],
-                      );
-                    }).toList();
-
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          // Display the retrieved workouts
-                          Container(
-                            width: 720,
-                            height: 80,
-                            decoration: BoxDecoration(),
-                            child: Align(
-                              alignment: AlignmentDirectional(0, 0),
-                              child: Text(
-                                "Workout History",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
+          
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            // Display the retrieved workouts
+                            Container(
+                              width: 720,
+                              height: 80,
+                              decoration: BoxDecoration(),
+                              child: Align(
+                                alignment: AlignmentDirectional(0, 0),
+                                child: Text(
+                                  "Workout History",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          for (Workout workout in workouts)
-                            GestureDetector(
-                              onTap: () => {
-                                showWorkoutOverviewDialog(context, workout),
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Container(
-                                  width: 400,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFFD6750),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          // decoration: BoxDecoration(
-                                          //   border: Border.all(
-                                          //       color: Colors.red, width: 2),
-                                          // ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(2.0),
-                                                child: Align(
-                                                  alignment:
-                                                      AlignmentDirectional(
-                                                          -1, 0),
-                                                  child: Text(
-                                                      formatTimestamp(
-                                                          workout.date),
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 18,
-                                                      )),
-                                                ),
-                                              ),
-                                              Align(
-                                                child: Padding(
+                            for (Workout workout in workouts)
+                              GestureDetector(
+                                onTap: () => {
+                                  showWorkoutOverviewDialog(context, workout),
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Container(
+                                    width: 400,
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFFFD6750),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            // decoration: BoxDecoration(
+                                            //   border: Border.all(
+                                            //       color: Colors.red, width: 2),
+                                            // ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Padding(
                                                   padding:
-                                                      const EdgeInsets.all(4.0),
-                                                  child: PopupMenuButton(
-                                                    padding: EdgeInsets.zero,
-                                                    icon: Icon(
-                                                      Icons.more_vert,
-                                                      color: Colors.white,
-                                                    ),
-                                                    color: Color(0xFF2E2C3A),
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    15.0))),
-                                                    itemBuilder: (BuildContext
-                                                            context) =>
-                                                        [
-                                                      PopupMenuItem(
-                                                        value: 'delete',
-                                                        child: ListTile(
-                                                          title: Text(
-                                                            'Delete Workout',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
+                                                      const EdgeInsets.all(2.0),
+                                                  child: Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            -1, 0),
+                                                    child: Text(
+                                                        formatTimestamp(
+                                                            workout.date),
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18,
+                                                        )),
+                                                  ),
+                                                ),
+                                                Align(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(4.0),
+                                                    child: PopupMenuButton(
+                                                      padding: EdgeInsets.zero,
+                                                      icon: Icon(
+                                                        Icons.more_vert,
+                                                        color: Colors.white,
+                                                      ),
+                                                      color: Color(0xFF2E2C3A),
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      15.0))),
+                                                      itemBuilder: (BuildContext
+                                                              context) =>
+                                                          [
+                                                        PopupMenuItem(
+                                                          value: 'delete',
+                                                          child: ListTile(
+                                                            title: Text(
+                                                              'Delete Workout',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.white,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                    onSelected: (value) {
-                                                      switch (value) {
-                                                        case 'delete':
-                                                          removeWorkout(
-                                                              workout);
-                                                          break;
-                                                      }
-                                                    },
+                                                      ],
+                                                      onSelected: (value) {
+                                                        switch (value) {
+                                                          case 'delete':
+                                                            removeWorkout(
+                                                                workout);
+                                                            break;
+                                                        }
+                                                      },
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Align(
-                                            alignment:
-                                                AlignmentDirectional(-1, 0),
-                                            child: Text(workout.name,
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20,
-                                                )),
+                                          Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Align(
+                                              alignment:
+                                                  AlignmentDirectional(-1, 0),
+                                              child: Text(workout.name,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20,
+                                                  )),
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                  child: Row(
-                                                children: [
-                                                  Text('⏰',
-                                                      style: TextStyle(
-                                                          fontSize: 20)),
-                                                  Text(
-                                                      findCurrentDuration(
-                                                          workout),
-                                                      style: TextStyle(
-                                                          color: Colors.white))
-                                                ],
-                                              )),
-                                              Container(
-                                                  child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8),
-                                                child: Row(
+                                          Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                    child: Row(
                                                   children: [
-                                                    Text('💪',
+                                                    Text('⏰',
                                                         style: TextStyle(
                                                             fontSize: 20)),
                                                     Text(
-                                                        workout.exercises.length
-                                                                .toString() +
-                                                            " Exercises",
+                                                        findCurrentDuration(
+                                                            workout),
                                                         style: TextStyle(
-                                                            color:
-                                                                Colors.white))
+                                                            color: Colors.white))
                                                   ],
-                                                ),
-                                              ))
-                                            ],
-                                          ),
-                                        )
-                                      ],
+                                                )),
+                                                Container(
+                                                    child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                          horizontal: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      Text('💪',
+                                                          style: TextStyle(
+                                                              fontSize: 20)),
+                                                      Text(
+                                                          workout.exercises.length
+                                                                  .toString() +
+                                                              " Exercises",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white))
+                                                    ],
+                                                  ),
+                                                ))
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                        ],
-                      ),
-                    );
-                  }
-
-                  // When the stream is still loading, show a loading indicator
-                  return CircularProgressIndicator();
-                },
-              ),
-            ],
+                          ],
+                        ),
+                      );
+                    }
+          
+                    // When the stream is still loading, show a loading indicator
+                    return CircularProgressIndicator();
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

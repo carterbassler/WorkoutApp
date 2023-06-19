@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Workout App',
       home: AuthPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 } 

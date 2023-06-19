@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Color(0xFF1b1a22),
       bottomNavigationBar: Container(
-        height: 90,
+        height: MediaQuery.of(context).size.height * 0.1004,
         decoration: BoxDecoration(
           color: Color(0xFF111111),
           borderRadius: BorderRadius.vertical(

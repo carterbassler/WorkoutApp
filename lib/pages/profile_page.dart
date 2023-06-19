@@ -293,7 +293,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 30, 10, 30, 10),
                             child: Container(
-                              width: 550,
+                              //HERE
+                              width: 500,
                               height: 100,
                               decoration: const BoxDecoration(),
                               child: Row(
@@ -302,7 +303,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    width: 100,
+                                    width : 100,
                                     height: 100,
                                     decoration: const BoxDecoration(),
                                     child: Column(
