@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app/components/my_button.dart';
+import 'package:workout_app/pages/login_page.dart';
 
 import '../components/my_textfield.dart';
 
@@ -45,6 +46,62 @@ class _EditProfilePageState extends State<EditProfilePage> {
       imageUrl = data?["imageUrl"];
       setState(() {});
     }
+  }
+
+  void deleteUser() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0), // rounded corners
+          ),
+          backgroundColor: Color(0xFF2E2C3A), // theme background color
+          title: Center(
+            child: Text(
+              "Are you sure you want to delete your account?",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "No",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    User? user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      // Delete the user.
+                      await user.delete();
+                      print("User successfully deleted");
+                    }
+                  },
+                  child: Text(
+                    "Yes",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 
   //Upload the New User Data to Firebase
@@ -122,6 +179,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             const SizedBox(height: 25),
             MyButton(onTap: finishProfileSetup, text: "Save Changes"),
+            const SizedBox(height: 25),
+            GestureDetector(
+              onTap: deleteUser,
+              child: Container(
+                height: 60, // Set the height
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 5, vertical: 15), // Adjust padding
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 20), // Adjust margin
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 220, 19, 5),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text("Delete Account",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -190,319 +190,319 @@ class _ActiveWorkoutPageState extends State<ActiveWorkoutPage> {
       backgroundColor: Color(0xFF1b1a22),
       body: SafeArea(
         child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.cancel,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Text(
-                    workout.end == null ? 'Current Workout' : 'Past Workout',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.done,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      saveWorkoutData();
-                    },
-                  ),
-                ],
-              ),
-            ),
+            children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.all(16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                      Container(
-                        padding: EdgeInsets.all(4),
-                        child: Icon(
-                          isEditing ? Icons.done : Icons.edit,
-                          color: Color(0xFF1b1a22),
-                        ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.cancel,
+                        color: Colors.white,
                       ),
-                    isEditing
-                        ? Expanded(
-                            child: TextFormField(
-                              controller: workoutNameController,
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                hintText: 'Workout Name',
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          )
-                        : Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Text(
-                                workout.name,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Text(
+                      workout.end == null ? 'Current Workout' : 'Past Workout',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.done,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        saveWorkoutData();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                        Container(
+                          padding: EdgeInsets.all(4),
+                          child: Icon(
+                            isEditing ? Icons.done : Icons.edit,
+                            color: Color(0xFF1b1a22),
+                          ),
+                        ),
+                      isEditing
+                          ? Expanded(
+                              child: TextFormField(
+                                controller: workoutNameController,
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
                                 textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  hintText: 'Workout Name',
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                  border: InputBorder.none,
+                                ),
                               ),
-                            ),
-                          ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (isEditing) {
-                            isEditing = false;
-                            workout.name = workoutNameController.text;
-                          } else {
-                            isEditing = true;
-                            workoutNameController.text = workout.name;
-                          }
-                        });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color:
-                              isEditing ? Colors.transparent : Colors.transparent,
-                        ),
-                        child: Icon(
-                          isEditing ? Icons.done : Icons.edit,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: StreamBuilder<String>(
-                stream: durationStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (workout.end == null) {
-                        return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical : 1),
-                          child: Text(
-                            snapshot.data!,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        );
-                    } else {
-                      return GestureDetector(
-                        onTap: () => showTimeDialog(context, workout),
-                        child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical : 1),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFfd6750),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            snapshot.data!,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  } else {
-                    return Text(
-                      'Loading...',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    );
-                  }
-                },
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    for (int i = 0; i < workout.exercises.length; i++)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  workout.exercises[i].name.toString(),
+                            )
+                          : Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(
+                                  workout.name,
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
-                                  textAlign: TextAlign.left,
+                                  textAlign: TextAlign.center,
                                 ),
-                                ExercisePopupMenu(
-                                  workout: workout,
-                                  exerciseIndex: i,
-                                  onRemoveExercise: () {
-                                    setState(() {
-                                      removeExercise(i);
-                                      //workout.exercises.removeAt(i);
-                                    });
-                                  },
-                                  onRenameExercise: (newName) {
-                                    setState(() {
-                                      workout.exercises[i].name = newName;
-                                    });
-                                  },
-                                ),
-                              ],
+                              ),
                             ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (isEditing) {
+                              isEditing = false;
+                              workout.name = workoutNameController.text;
+                            } else {
+                              isEditing = true;
+                              workoutNameController.text = workout.name;
+                            }
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:
+                                isEditing ? Colors.transparent : Colors.transparent,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment
-                                  .center, // Center align the items vertically
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    child: Center(
-                                      child: Text(
-                                        'Sets',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    child: Center(
-                                      child: Transform.scale(
-                                        scale:
-                                            1.0, // Adjust the scale factor as desired
-                                        child: Text(
-                                          'Weight',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    child: Center(
-                                      child: Transform.scale(
-                                        scale:
-                                            1.0, // Adjust the scale factor as desired
-                                        child: Text(
-                                          'Reps',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    child: Center(
-                                      child: Text(
-                                        'Completed',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                          child: Icon(
+                            isEditing ? Icons.done : Icons.edit,
+                            color: Colors.white,
                           ),
-                          for (int j = 0;
-                              j < workout.exercises[i].sets.length;
-                              j++)
-                            CustomSetWidget(
-                              workout: workout,
-                              i: i,
-                              j: j,
-                              weightController: weightControllers[i][j],
-                              repsController: repsControllers[i][j],
-                              onDismissed: () {
-                                setState(() {
-                                  removeSet(i, j);
-                                });
-                              },
-                              onWeightChanged: (value) {
-                                setState(() {
-                                  workout.exercises[i].sets[j].weight =
-                                      int.parse(value);
-                                });
-                              },
-                              onRepsChanged: (value) {
-                                setState(() {
-                                  workout.exercises[i].sets[j].numReps =
-                                      int.parse(value);
-                                });
-                              },
-                              onCompletedChanged: (newValue) {
-                                setState(() {
-                                  workout.exercises[i].sets[j].isCompleted =
-                                      newValue;
-                                });
-                              },
-                            ),
-                          OtherButton(onTap: () => addSet(i), text: 'Add Set'),
-                        ],
+                        ),
                       ),
-                    const SizedBox(height: 10),
-                    OtherButton(onTap: addExercise, text: 'Add Exercise'),
-                  ],
+                    ],
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StreamBuilder<String>(
+                  stream: durationStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (workout.end == null) {
+                          return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical : 1),
+                            child: Text(
+                              snapshot.data!,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                      } else {
+                        return GestureDetector(
+                          onTap: () => showTimeDialog(context, workout),
+                          child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical : 1),
+                            decoration: BoxDecoration(
+                              color: Color(0xFFfd6750),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              snapshot.data!,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    } else {
+                      return Text(
+                        'Loading...',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      );
+                    }
+                  },
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      for (int i = 0; i < workout.exercises.length; i++)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    workout.exercises[i].name.toString(),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  ExercisePopupMenu(
+                                    workout: workout,
+                                    exerciseIndex: i,
+                                    onRemoveExercise: () {
+                                      setState(() {
+                                        removeExercise(i);
+                                        //workout.exercises.removeAt(i);
+                                      });
+                                    },
+                                    onRenameExercise: (newName) {
+                                      setState(() {
+                                        workout.exercises[i].name = newName;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment
+                                    .center, // Center align the items vertically
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      child: Center(
+                                        child: Text(
+                                          'Sets',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      child: Center(
+                                        child: Transform.scale(
+                                          scale:
+                                              1.0, // Adjust the scale factor as desired
+                                          child: Text(
+                                            'Weight',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      child: Center(
+                                        child: Transform.scale(
+                                          scale:
+                                              1.0, // Adjust the scale factor as desired
+                                          child: Text(
+                                            'Reps',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      child: Center(
+                                        child: Text(
+                                          'Completed',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            for (int j = 0;
+                                j < workout.exercises[i].sets.length;
+                                j++)
+                              CustomSetWidget(
+                                workout: workout,
+                                i: i,
+                                j: j,
+                                weightController: weightControllers[i][j],
+                                repsController: repsControllers[i][j],
+                                onDismissed: () {
+                                  setState(() {
+                                    removeSet(i, j);
+                                  });
+                                },
+                                onWeightChanged: (value) {
+                                  setState(() {
+                                    workout.exercises[i].sets[j].weight =
+                                        int.parse(value);
+                                  });
+                                },
+                                onRepsChanged: (value) {
+                                  setState(() {
+                                    workout.exercises[i].sets[j].numReps =
+                                        int.parse(value);
+                                  });
+                                },
+                                onCompletedChanged: (newValue) {
+                                  setState(() {
+                                    workout.exercises[i].sets[j].isCompleted =
+                                        newValue;
+                                  });
+                                },
+                              ),
+                            OtherButton(onTap: () => addSet(i), text: 'Add Set'),
+                          ],
+                        ),
+                      const SizedBox(height: 10),
+                      OtherButton(onTap: addExercise, text: 'Add Exercise'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
     );
   }
 }
