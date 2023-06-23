@@ -102,9 +102,19 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   const SizedBox(height: 50),
                   //Sign In with Google
-                  SquareTile(
-                    imagePath: 'lib/images/google.png',
-                    onTap: () => AuthService().signInWithGoogle(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SquareTile(
+                        imagePath: 'lib/images/google.png',
+                        onTap: () => AuthService().signInWithGoogle(),
+                      ),
+                      SizedBox(width: 25),
+                      SquareTile(
+                        imagePath: 'lib/images/apple.png',
+                        onTap: () => AuthService().signInWithApple(),
+                      ),
+                    ],
                   ),
 
                   const SizedBox(height: 25),

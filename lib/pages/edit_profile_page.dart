@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app/components/my_button.dart';
-import 'package:workout_app/pages/login_page.dart';
 
 import '../components/my_textfield.dart';
 

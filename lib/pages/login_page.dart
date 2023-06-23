@@ -9,7 +9,7 @@ import 'forgot_pw_page.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
-  LoginPage({super.key, required this.onTap} );
+  LoginPage({super.key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text,
       );
 
-    Navigator.pop(context);
+      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       errorMessage(e.code);
@@ -41,13 +41,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //If Login Details are Incorrect Tell the User
-  errorMessage( String message) {
+  errorMessage(String message) {
     showDialog(
-    context: context, 
-    builder: (context) {
-      return AlertDialog(title : Text(message),
-      );
-    },
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(message),
+        );
+      },
     );
   }
 
@@ -67,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                         color: Colors.white,
                         fontSize: 16,
                       )),
-            
+
                   const SizedBox(height: 25),
                   //Username TextField
                   MyTextField(
@@ -75,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: "Email",
                     hiddenText: false,
                   ),
-            
+
                   const SizedBox(height: 25),
                   //Password TextField
                   MyTextField(
@@ -83,14 +84,15 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: "Password",
                     hiddenText: true,
                   ),
-            
+
                   const SizedBox(height: 25),
 
                   //Page to Reset Password
                   GestureDetector(
-                    onTap : () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                         return ForgotPasswordPage(); 
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ForgotPasswordPage();
                       }));
                     },
                     child: Text(
@@ -98,24 +100,31 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-            
+
                   const SizedBox(height: 25),
-            
-                  MyButton(
-                    onTap: signUserIn,
-                    text: "Sign In"
-                  ),
-            
+
+                  MyButton(onTap: signUserIn, text: "Sign In"),
+
                   const SizedBox(height: 50),
-            
-                  SquareTile(
-                    imagePath: 'lib/images/google.png',
-                    onTap: () => AuthService().signInWithGoogle(),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SquareTile(
+                        imagePath: 'lib/images/google.png',
+                        onTap: () => AuthService().signInWithGoogle(),
+                      ),
+                      SizedBox(width: 25),
+                      SquareTile(
+                        imagePath: 'lib/images/apple.png',
+                        onTap: () => AuthService().signInWithApple(),
+                      ),
+                    ],
                   ),
-            
+
                   const SizedBox(height: 25),
-            
-                //Switch to SignUp Page
+
+                  //Switch to SignUp Page
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -127,7 +136,8 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(
                           'Sign Up Now',
                           style: TextStyle(
-                              color: Color(0xFFfd6750), fontWeight: FontWeight.bold),
+                              color: Color(0xFFfd6750),
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
